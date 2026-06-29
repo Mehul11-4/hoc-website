@@ -1,14 +1,36 @@
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Menu from "./pages/Menu";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
+import OrderDetail from "./pages/OrderDetail";
+import Admin from "./pages/Admin";
+
 function App() {
   return (
-    <div className="min-h-screen bg-brand-cream flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="font-display text-4xl text-brand-brown font-bold">
-          HOC — House of Cakes
-        </h1>
-        <p className="font-body text-brown-light mt-4 text-lg">
-          Project setup complete. Let's build. 🎂
-        </p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
   );
 }
