@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, Menu as MenuIcon, X, User, LogOut } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useCart } from "../hooks/useCart";
 import { logOut } from "../firebase/auth";
 
 export default function Navbar() {
@@ -10,6 +12,14 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, userProfile } = useAuth();
+  const { itemCount, justAdded, clearJustAdded } = useCart();
+
+  useEffect(() => {
+    if (justAdded) {
+      const timer = setTimeout(() => clearJustAdded(), 400);
+      return () => clearTimeout(timer);
+    }
+  }, [justAdded]);
 
   const links = [
     { name: "Home", path: "/" },
@@ -60,10 +70,27 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             to="/cart"
-            className="flex items-center gap-2 font-body text-sm text-brand-cream hover:text-brand-red transition-colors duration-200"
+            className="relative flex items-center gap-2 font-body text-sm text-brand-cream hover:text-brand-red transition-colors duration-200"
           >
-            <ShoppingCart size={18} />
+            <motion.div
+              animate={justAdded ? { scale: [1, 1.3, 1] } : {}}
+              transition={{ duration: 0.4 }}
+            >
+              <ShoppingCart size={18} />
+            </motion.div>
             Cart
+            <AnimatePresence>
+              {itemCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -top-2 -right-3 bg-brand-red text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                >
+                  {itemCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Link>
 
           {currentUser ? (
@@ -135,7 +162,7 @@ export default function Navbar() {
             className="flex items-center gap-2 font-body text-sm text-brand-cream"
           >
             <ShoppingCart size={18} />
-            Cart
+            Cart {itemCount > 0 && `(${itemCount})`}
           </Link>
 
           {currentUser ? (

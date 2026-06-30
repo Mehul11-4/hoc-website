@@ -1,6 +1,7 @@
-import { Cake, Truck, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Cake, Truck, Star, ShoppingCart, Plus, Minus } from "lucide-react";
+import { useCart } from "../hooks/useCart";
 
 // Animation variants
 const fadeUp = {
@@ -21,7 +22,54 @@ const stagger = {
   },
 };
 
+function HomeCartStepper({ item, quantity, onAdd, onIncrease, onDecrease }) {
+  if (quantity === 0) {
+    return (
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-2 bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-all duration-200 hover:scale-105"
+      >
+        <ShoppingCart size={16} />
+        Add
+      </button>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-center gap-3 bg-brand-red rounded-md px-2 py-1.5"
+    >
+      <button
+        onClick={onDecrease}
+        className="text-white hover:scale-110 transition-transform duration-150 w-5 flex items-center justify-center"
+      >
+        <Minus size={16} />
+      </button>
+      <motion.span
+        key={quantity}
+        initial={{ scale: 1.3 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.15 }}
+        className="text-white font-body font-semibold text-sm w-4 text-center"
+      >
+        {quantity}
+      </motion.span>
+      <button
+        onClick={onIncrease}
+        className="text-white hover:scale-110 transition-transform duration-150 w-5 flex items-center justify-center"
+      >
+        <Plus size={16} />
+      </button>
+    </motion.div>
+  );
+}
+
 export default function Home() {
+  const { addToCart, increaseQuantity, decreaseQuantity, getItemQuantity } =
+    useCart();
   return (
     <div className="overflow-x-hidden">
       {/* ── HERO SECTION ── */}
@@ -206,22 +254,25 @@ export default function Home() {
           >
             {[
               {
+                id: "home-cake1",
                 image: "/images/cake1.webp",
                 name: "Butterfly Wedding Cake",
                 desc: "Elegant white & gold with butterfly toppers",
-                price: "₹1,800",
+                price: 1800,
               },
               {
+                id: "home-cake2",
                 image: "/images/cake2.webp",
                 name: "Custom Birthday Cake",
                 desc: "Personalised cakes for every occasion",
-                price: "₹1,200",
+                price: 1200,
               },
               {
+                id: "home-cake3",
                 image: "/images/cake3.webp",
                 name: "Bear 1st Birthday Cake",
                 desc: "Adorable theme cakes for little ones",
-                price: "₹950",
+                price: 950,
               },
             ].map((item, i) => (
               <motion.div
@@ -245,12 +296,16 @@ export default function Home() {
                     {item.desc}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="font-display text-brand-red font-bold text-lg">
-                      {item.price}
+                    <span className="font-body text-brand-red font-bold text-lg">
+                      ₹{item.price}
                     </span>
-                    <button className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-all duration-200 hover:scale-105">
-                      Add to Cart
-                    </button>
+                    <HomeCartStepper
+                      item={item}
+                      quantity={getItemQuantity(item.id)}
+                      onAdd={() => addToCart(item)}
+                      onIncrease={() => increaseQuantity(item.id)}
+                      onDecrease={() => decreaseQuantity(item.id)}
+                    />
                   </div>
                 </div>
               </motion.div>

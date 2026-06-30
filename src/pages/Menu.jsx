@@ -1,6 +1,7 @@
+import { useCart } from "../hooks/useCart";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Plus, Minus } from "lucide-react";
 import { getAllMenuItems } from "../firebase/firestore";
 
 const fadeUp = {
@@ -12,12 +13,58 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+function CartStepper({ item, quantity, onAdd, onIncrease, onDecrease }) {
+  if (quantity === 0) {
+    return (
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-2 bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-all duration-200 hover:scale-105"
+      >
+        <ShoppingCart size={16} />
+        Add
+      </button>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-center gap-3 bg-brand-red rounded-md px-2 py-1.5"
+    >
+      <button
+        onClick={onDecrease}
+        className="text-white hover:scale-110 transition-transform duration-150 w-5 flex items-center justify-center"
+      >
+        <Minus size={16} />
+      </button>
+      <motion.span
+        key={quantity}
+        initial={{ scale: 1.3 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.15 }}
+        className="text-white font-body font-semibold text-sm w-4 text-center"
+      >
+        {quantity}
+      </motion.span>
+      <button
+        onClick={onIncrease}
+        className="text-white hover:scale-110 transition-transform duration-150 w-5 flex items-center justify-center"
+      >
+        <Plus size={16} />
+      </button>
+    </motion.div>
+  );
+}
+
 export default function Menu() {
   const [allItems, setAllItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-
+  const { addToCart, increaseQuantity, decreaseQuantity, getItemQuantity } =
+    useCart();
   useEffect(() => {
     async function fetchMenu() {
       try {
@@ -146,13 +193,16 @@ export default function Menu() {
                       {item.description}
                     </p>
                     <div className="flex items-center justify-between mt-auto">
-                      <span className="font-display text-brand-red font-bold text-lg">
+                      <span className="font-body text-brand-red font-bold text-lg">
                         ₹{item.price}
                       </span>
-                      <button className="flex items-center gap-2 bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-all duration-200 hover:scale-105">
-                        <ShoppingCart size={16} />
-                        Add
-                      </button>
+                      <CartStepper
+                        item={item}
+                        quantity={getItemQuantity(item.id)}
+                        onAdd={() => addToCart(item)}
+                        onIncrease={() => increaseQuantity(item.id)}
+                        onDecrease={() => decreaseQuantity(item.id)}
+                      />
                     </div>
                   </div>
                 </motion.div>
