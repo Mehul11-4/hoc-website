@@ -20,9 +20,13 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="font-display text-2xl font-bold text-brand-cream tracking-wide"
+          className="flex items-center overflow-hidden h-14 w-14 rounded-full bg-white"
         >
-          HOC
+          <img
+            src="/images/logo.jpg"
+            alt="HOC - House of Cakes"
+            className="h-full w-full object-cover scale-150"
+          />
         </Link>
 
         {/* Desktop Links */}
