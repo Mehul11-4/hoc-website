@@ -106,6 +106,13 @@ export default function Navbar() {
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden">
                   <Link
+                    to="/account"
+                    onClick={() => setProfileOpen(false)}
+                    className="block px-4 py-3 text-sm font-body text-brand-brown hover:bg-cream-dark transition-colors"
+                  >
+                    My Account
+                  </Link>
+                  <Link
                     to="/orders"
                     onClick={() => setProfileOpen(false)}
                     className="block px-4 py-3 text-sm font-body text-brand-brown hover:bg-cream-dark transition-colors"
@@ -168,11 +175,18 @@ export default function Navbar() {
           {currentUser ? (
             <>
               <Link
+                to="/account"
+                onClick={() => setMenuOpen(false)}
+                className="font-body text-sm text-brand-cream"
+              >
+                My Account
+              </Link>
+              <Link
                 to="/orders"
                 onClick={() => setMenuOpen(false)}
                 className="font-body text-sm text-brand-cream"
               >
-                My Orders ({userProfile?.name?.split(" ")[0] || "Account"})
+                My Orders
               </Link>
               <button
                 onClick={handleLogout}
