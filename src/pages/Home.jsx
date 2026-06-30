@@ -1,3 +1,4 @@
+import { Cake, Truck, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -135,36 +136,45 @@ export default function Home() {
           >
             {[
               {
-                icon: "🎂",
+                icon: Cake,
                 title: "Baked Fresh Daily",
                 desc: "Every cake, pastry, and dessert is made fresh every single day — never frozen, never stale.",
               },
               {
-                icon: "🚚",
+                icon: Truck,
                 title: "Fast Local Delivery",
                 desc: "Quick delivery across Bijainagar. Order online and get your treats at your door.",
               },
               {
-                icon: "⭐",
+                icon: Star,
                 title: "Premium Quality",
                 desc: "Only the finest ingredients go into every HOC creation — taste the difference.",
               },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                transition={{ duration: 0.5 }}
-                className="bg-brown-light rounded-xl p-8 text-center hover:scale-105 transition-transform duration-300"
-              >
-                <div className="text-5xl mb-4">{item.icon}</div>
-                <h3 className="font-display text-xl text-brand-cream font-semibold mb-3">
-                  {item.title}
-                </h3>
-                <p className="font-body text-brown-muted text-sm leading-relaxed">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
+            ].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  transition={{ duration: 0.5 }}
+                  className="bg-brown-light rounded-xl p-8 text-center hover:scale-105 transition-transform duration-300"
+                >
+                  <div className="w-14 h-14 rounded-full bg-brand-red/20 flex items-center justify-center mx-auto mb-5">
+                    <Icon
+                      size={28}
+                      className="text-brand-red"
+                      strokeWidth={1.75}
+                    />
+                  </div>
+                  <h3 className="font-display text-xl text-brand-cream font-semibold mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="font-body text-brown-muted text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>

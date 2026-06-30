@@ -1,3 +1,4 @@
+import { ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -47,9 +48,10 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             to="/cart"
-            className="font-body text-sm text-brand-cream hover:text-brand-red transition-colors duration-200"
+            className="flex items-center gap-2 font-body text-sm text-brand-cream hover:text-brand-red transition-colors duration-200"
           >
-            🛒 Cart
+            <ShoppingCart size={18} />
+            Cart
           </Link>
           <Link
             to="/login"
@@ -61,10 +63,10 @@ export default function Navbar() {
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden text-brand-cream text-2xl"
+          className="md:hidden text-brand-cream"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? "✕" : "☰"}
+          {menuOpen ? <X size={26} /> : <MenuIcon size={26} />}
         </button>
       </div>
 
@@ -85,9 +87,10 @@ export default function Navbar() {
           <Link
             to="/cart"
             onClick={() => setMenuOpen(false)}
-            className="font-body text-sm text-brand-cream"
+            className="flex items-center gap-2 font-body text-sm text-brand-cream"
           >
-            🛒 Cart
+            <ShoppingCart size={18} />
+            Cart
           </Link>
           <Link
             to="/login"
