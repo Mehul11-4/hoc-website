@@ -1,10 +1,15 @@
-import { ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ShoppingCart, Menu as MenuIcon, X, User, LogOut } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import { logOut } from "../firebase/auth";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser, userProfile } = useAuth();
 
   const links = [
     { name: "Home", path: "/" },
@@ -14,6 +19,13 @@ export default function Navbar() {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  async function handleLogout() {
+    await logOut();
+    setProfileOpen(false);
+    setMenuOpen(false);
+    navigate("/");
+  }
 
   return (
     <nav className="bg-brand-brown text-brand-cream sticky top-0 z-50 shadow-brand">
@@ -44,7 +56,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right Side — Cart + Login */}
+        {/* Right Side — Cart + Auth */}
         <div className="hidden md:flex items-center gap-4">
           <Link
             to="/cart"
@@ -53,12 +65,44 @@ export default function Navbar() {
             <ShoppingCart size={18} />
             Cart
           </Link>
-          <Link
-            to="/login"
-            className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-colors duration-200"
-          >
-            Login
-          </Link>
+
+          {currentUser ? (
+            <div className="relative">
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 bg-brown-light text-brand-cream font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-brand-red transition-colors duration-200"
+              >
+                <User size={16} />
+                {userProfile?.name?.split(" ")[0] || "Account"}
+              </button>
+
+              {profileOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden">
+                  <Link
+                    to="/orders"
+                    onClick={() => setProfileOpen(false)}
+                    className="block px-4 py-3 text-sm font-body text-brand-brown hover:bg-cream-dark transition-colors"
+                  >
+                    My Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left flex items-center gap-2 px-4 py-3 text-sm font-body text-error hover:bg-red-soft transition-colors"
+                  >
+                    <LogOut size={16} />
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-red-hover transition-colors duration-200"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -84,6 +128,7 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+
           <Link
             to="/cart"
             onClick={() => setMenuOpen(false)}
@@ -92,13 +137,33 @@ export default function Navbar() {
             <ShoppingCart size={18} />
             Cart
           </Link>
-          <Link
-            to="/login"
-            onClick={() => setMenuOpen(false)}
-            className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md text-center"
-          >
-            Login
-          </Link>
+
+          {currentUser ? (
+            <>
+              <Link
+                to="/orders"
+                onClick={() => setMenuOpen(false)}
+                className="font-body text-sm text-brand-cream"
+              >
+                My Orders ({userProfile?.name?.split(" ")[0] || "Account"})
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 font-body text-sm text-error text-left"
+              >
+                <LogOut size={16} />
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md text-center"
+            >
+              Login
+            </Link>
+          )}
         </div>
       )}
     </nav>

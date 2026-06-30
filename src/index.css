@@ -12,6 +12,10 @@
   --color-red-hover: #b81e23;
   --color-red-soft: #fdecea;
   --color-cream-dark: #f5e6d8;
+  --color-success: #2e7d32;
+  --color-warning: #f57c00;
+  --color-error: #c62828;
+  --color-info: #1565c0;
 
   --font-display: "Playfair Display", serif;
   --font-body: "DM Sans", sans-serif;
