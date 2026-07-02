@@ -2,9 +2,7 @@
 
 A full-stack e-commerce website built for **House of Cakes (HOC)**, a bakery & café in Bijainagar, Rajasthan. Built as a portfolio project to demonstrate real-world full-stack development skills — authentication, live database integration, cart & checkout, and admin order management.
 
-**Live Demo:** [Add your Vercel URL here after deployment]
-
----
+## **Live Demo:** https://hoc-website-ebon.vercel.app/
 
 ## Features
 
