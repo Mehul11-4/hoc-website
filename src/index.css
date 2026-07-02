@@ -28,7 +28,6 @@
     font-family: var(--font-body);
     background-color: var(--color-brand-cream);
     color: var(--color-brand-brown);
-    scroll-behavior: smooth;
   }
 
   h1,

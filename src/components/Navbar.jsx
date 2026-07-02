@@ -38,7 +38,8 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-brand-brown text-brand-cream sticky top-0 z-50 shadow-brand">
+    <nav className="bg-brand-brown text-brand-cream sticky top-0 z-50 shadow-brand will-change-transform">
+      {" "}
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link
@@ -67,25 +68,24 @@ export default function Navbar() {
         </div>
 
         {/* Right Side — Cart + Auth */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
           <Link
             to="/cart"
-            className="relative flex items-center gap-2 font-body text-sm text-brand-cream hover:text-brand-red transition-colors duration-200"
+            className="relative flex items-center justify-center w-10 h-10 rounded-full bg-brown-light hover:bg-brand-red transition-colors duration-200"
           >
             <motion.div
               animate={justAdded ? { scale: [1, 1.3, 1] } : {}}
               transition={{ duration: 0.4 }}
             >
-              <ShoppingCart size={18} />
+              <ShoppingCart size={18} className="text-brand-cream" />
             </motion.div>
-            Cart
             <AnimatePresence>
               {itemCount > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  className="absolute -top-2 -right-3 bg-brand-red text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                  className="absolute -top-1 -right-1 bg-brand-red text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-brand-brown"
                 >
                   {itemCount}
                 </motion.span>
@@ -97,10 +97,11 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 bg-brown-light text-brand-cream font-body text-sm font-medium px-4 py-2 rounded-md hover:bg-brand-red transition-colors duration-200"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-brown-light hover:bg-brand-red transition-colors duration-200"
               >
-                <User size={16} />
-                {userProfile?.name?.split(" ")[0] || "Account"}
+                <span className="font-body text-sm font-semibold text-brand-cream">
+                  {(userProfile?.name?.charAt(0) || "U").toUpperCase()}
+                </span>
               </button>
 
               {profileOpen && (
@@ -147,7 +148,6 @@ export default function Navbar() {
           {menuOpen ? <X size={26} /> : <MenuIcon size={26} />}
         </button>
       </div>
-
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-brand-brown px-4 pb-4 flex flex-col gap-4">
