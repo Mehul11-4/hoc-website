@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, User, Phone, Check, CreditCard } from "lucide-react";
+import {
+  MapPin,
+  User,
+  Phone,
+  Check,
+  CreditCard,
+  Home,
+  Edit3,
+} from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
 import { createOrder } from "../firebase/firestore";
@@ -22,6 +30,7 @@ export default function Checkout() {
     phone: userProfile?.phone || "",
     address: userProfile?.address || "",
   });
+  const [useNewAddress, setUseNewAddress] = useState(!userProfile?.address);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,13 +38,21 @@ export default function Checkout() {
 
   function handleAddressSubmit(e) {
     e.preventDefault();
-    if (
-      form.name.trim().length < 2 ||
-      form.phone.trim().length < 10 ||
-      form.address.trim().length < 10
-    ) {
-      setError("Please fill in all fields correctly.");
-      return;
+    if (useNewAddress || !userProfile?.address) {
+      if (
+        form.name.trim().length < 2 ||
+        form.phone.trim().length < 10 ||
+        form.address.trim().length < 10
+      ) {
+        setError("Please fill in all fields correctly.");
+        return;
+      }
+    } else {
+      setForm({
+        name: userProfile.name,
+        phone: userProfile.phone,
+        address: userProfile.address,
+      });
     }
     setError("");
     setStep(2);
@@ -174,55 +191,96 @@ export default function Checkout() {
                     </div>
                   )}
 
-                  <div className="relative">
-                    <User
-                      size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-brown-muted"
-                    />
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Full Name"
-                      value={form.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors"
-                    />
-                  </div>
+                  {userProfile?.address && !useNewAddress && (
+                    <div className="border-2 border-brand-red rounded-lg p-4 flex items-start gap-3">
+                      <Home
+                        size={20}
+                        className="text-brand-red flex-shrink-0 mt-0.5"
+                      />
+                      <div className="flex-1">
+                        <p className="font-body text-sm font-semibold text-brand-brown">
+                          Saved Address
+                        </p>
+                        <p className="font-body text-sm text-brown-light mt-1">
+                          {userProfile.name} · {userProfile.phone}
+                        </p>
+                        <p className="font-body text-sm text-brown-light">
+                          {userProfile.address}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setUseNewAddress(true)}
+                        className="text-brand-red flex-shrink-0"
+                      >
+                        <Edit3 size={16} />
+                      </button>
+                    </div>
+                  )}
 
-                  <div className="relative">
-                    <Phone
-                      size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-brown-muted"
-                    />
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone Number"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required
-                      pattern="[0-9]{10}"
-                      title="Enter a 10-digit phone number"
-                      className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors"
-                    />
-                  </div>
+                  {(useNewAddress || !userProfile?.address) && (
+                    <>
+                      {userProfile?.address && (
+                        <button
+                          type="button"
+                          onClick={() => setUseNewAddress(false)}
+                          className="text-brand-red font-body text-sm font-semibold text-left hover:underline underline-offset-4 w-fit"
+                        >
+                          ← Use saved address instead
+                        </button>
+                      )}
 
-                  <div className="relative">
-                    <MapPin
-                      size={18}
-                      className="absolute left-3 top-3 text-brown-muted"
-                    />
-                    <textarea
-                      name="address"
-                      placeholder="Full Delivery Address"
-                      value={form.address}
-                      onChange={handleChange}
-                      required
-                      rows={3}
-                      className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors resize-none"
-                    />
-                  </div>
+                      <div className="relative">
+                        <User
+                          size={18}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-brown-muted"
+                        />
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="Full Name"
+                          value={form.name}
+                          onChange={handleChange}
+                          required
+                          className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors"
+                        />
+                      </div>
+
+                      <div className="relative">
+                        <Phone
+                          size={18}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-brown-muted"
+                        />
+                        <input
+                          type="tel"
+                          name="phone"
+                          placeholder="Phone Number"
+                          value={form.phone}
+                          onChange={handleChange}
+                          required
+                          pattern="[0-9]{10}"
+                          title="Enter a 10-digit phone number"
+                          className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors"
+                        />
+                      </div>
+
+                      <div className="relative">
+                        <MapPin
+                          size={18}
+                          className="absolute left-3 top-3 text-brown-muted"
+                        />
+                        <textarea
+                          name="address"
+                          placeholder="Full Delivery Address"
+                          value={form.address}
+                          onChange={handleChange}
+                          required
+                          rows={3}
+                          className="w-full pl-10 pr-4 py-3 rounded-sm border border-brown-muted focus:border-brand-red outline-none font-body text-sm transition-colors resize-none"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   <button
                     type="submit"
@@ -335,16 +393,22 @@ export default function Checkout() {
                   </span>
                 </div>
               ))}
-              <div className="border-t border-cream-dark mt-2 pt-3 flex justify-between text-brown-light">
-                <span>Subtotal</span>
-                <span>₹{subtotal}</span>
-              </div>
-              <div className="flex justify-between text-brown-light">
-                <span>Delivery</span>
-                <span>₹{deliveryFee}</span>
+              <div className="border-t border-cream-dark mt-2 pt-3 flex flex-col gap-2">
+                <div className="flex justify-between text-brown-light">
+                  <span>Items Total</span>
+                  <span>₹{subtotal}</span>
+                </div>
+                <div className="flex justify-between text-brown-light">
+                  <span>Delivery Fee</span>
+                  <span>₹{deliveryFee}</span>
+                </div>
+                <div className="flex justify-between text-brown-light">
+                  <span>Handling Fee</span>
+                  <span>₹0</span>
+                </div>
               </div>
               <div className="border-t border-cream-dark pt-3 flex justify-between font-bold text-brand-brown text-base">
-                <span>Total</span>
+                <span>Grand Total</span>
                 <span>₹{total}</span>
               </div>
             </div>

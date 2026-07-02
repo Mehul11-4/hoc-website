@@ -13,6 +13,7 @@ import Orders from "./pages/Orders";
 import Account from "./pages/Account";
 import OrderDetail from "./pages/OrderDetail";
 import Admin from "./pages/Admin";
+import FloatingCartBar from "./components/FloatingCartBar";
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <FloatingCartBar />
     </div>
   );
 }
