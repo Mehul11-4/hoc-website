@@ -142,13 +142,57 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden text-brand-cream"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <X size={26} /> : <MenuIcon size={26} />}
-        </button>
+        {/* Mobile — Cart + Account + Hamburger */}
+        <div className="md:hidden flex items-center gap-2">
+          <Link
+            to="/cart"
+            className="relative flex items-center justify-center w-9 h-9 rounded-full bg-brown-light"
+          >
+            <motion.div
+              animate={justAdded ? { scale: [1, 1.3, 1] } : {}}
+              transition={{ duration: 0.4 }}
+            >
+              <ShoppingCart size={17} className="text-brand-cream" />
+            </motion.div>
+            <AnimatePresence>
+              {itemCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -top-1 -right-1 bg-brand-red text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-brand-brown"
+                >
+                  {itemCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Link>
+
+          {currentUser ? (
+            <Link
+              to="/account"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-brown-light"
+            >
+              <span className="font-body text-xs font-semibold text-brand-cream">
+                {(userProfile?.name?.charAt(0) || "U").toUpperCase()}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-red"
+            >
+              <User size={16} className="text-white" />
+            </Link>
+          )}
+
+          <button
+            className="text-brand-cream ml-1"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={24} /> : <MenuIcon size={24} />}
+          </button>
+        </div>
       </div>
       {/* Mobile Menu */}
       {menuOpen && (
@@ -159,30 +203,14 @@ export default function Navbar() {
               to={link.path}
               onClick={() => setMenuOpen(false)}
               className={`font-body text-sm font-medium transition-colors duration-200
-                ${isActive(link.path) ? "text-brand-red" : "text-brand-cream"}`}
+          ${isActive(link.path) ? "text-brand-red" : "text-brand-cream"}`}
             >
               {link.name}
             </Link>
           ))}
 
-          <Link
-            to="/cart"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 font-body text-sm text-brand-cream"
-          >
-            <ShoppingCart size={18} />
-            Cart {itemCount > 0 && `(${itemCount})`}
-          </Link>
-
-          {currentUser ? (
+          {currentUser && (
             <>
-              <Link
-                to="/account"
-                onClick={() => setMenuOpen(false)}
-                className="font-body text-sm text-brand-cream"
-              >
-                My Account
-              </Link>
               <Link
                 to="/orders"
                 onClick={() => setMenuOpen(false)}
@@ -198,14 +226,6 @@ export default function Navbar() {
                 Log Out
               </button>
             </>
-          ) : (
-            <Link
-              to="/login"
-              onClick={() => setMenuOpen(false)}
-              className="bg-brand-red text-white font-body text-sm font-medium px-4 py-2 rounded-md text-center"
-            >
-              Login
-            </Link>
           )}
         </div>
       )}
