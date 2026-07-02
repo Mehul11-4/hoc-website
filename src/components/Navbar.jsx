@@ -38,7 +38,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-brand-brown text-brand-cream sticky top-0 z-50 shadow-brand will-change-transform">
+    <nav className="bg-brand-brown text-brand-cream sticky top-0 z-50 shadow-brand">
       {" "}
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
@@ -49,6 +49,8 @@ export default function Navbar() {
           <img
             src="/images/logo.jpg"
             alt="HOC - House of Cakes"
+            width="56"
+            height="56"
             className="h-full w-full object-cover scale-150"
           />
         </Link>

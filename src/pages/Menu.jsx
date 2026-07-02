@@ -167,15 +167,18 @@ export default function Menu() {
                   className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-brand hover:-translate-y-1 transition-all duration-300 flex flex-col"
                 >
                   {item.imageUrl ? (
-                    <div className="overflow-hidden h-48">
+                    <div className="overflow-hidden h-48 aspect-[4/3]">
                       <img
                         src={item.imageUrl}
                         alt={item.name}
+                        width="400"
+                        height="300"
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                   ) : (
-                    <div className="h-48 bg-cream-dark flex items-center justify-center">
+                    <div className="h-48 aspect-[4/3] bg-cream-dark flex items-center justify-center">
+                      {" "}
                       <span className="font-display text-brown-muted text-sm">
                         HOC
                       </span>

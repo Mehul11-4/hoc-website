@@ -18,6 +18,8 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }) {
             <img
               src={item.imageUrl}
               alt={item.name}
+              width="80"
+              height="80"
               className="w-full h-full object-cover"
             />
           ) : (

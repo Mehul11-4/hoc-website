@@ -141,6 +141,8 @@ export default function Home() {
               <img
                 src="/images/cake1.webp"
                 alt="Beautiful celebration cake from HOC"
+                width="600"
+                height="500"
                 className="w-full h-[500px] object-cover"
               />
               {/* Floating badge */}

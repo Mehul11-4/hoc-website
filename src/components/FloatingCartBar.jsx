@@ -19,7 +19,7 @@ export default function FloatingCartBar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-4 left-4 right-4 z-40 max-w-md mx-auto will-change-transform"
+          className="fixed bottom-4 left-4 right-4 z-40 max-w-md mx-auto"
         >
           <Link
             to="/cart"
